@@ -55,9 +55,9 @@ pip install gmsh
 ### Запуск презентации
 После установки Streamlit и активации виртуального окружения запустите презентацию командой:
 ```bash
-streamlit run presentation.py
+streamlit run Tittle.py
 ```
-Где `presentation.py` — ваш скрипт для презентации.
+Где `Tittle.py` — ваш скрипт для презентации.
 
 ## Использование
 ### Генерация сетки
