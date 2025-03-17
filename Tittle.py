@@ -61,6 +61,11 @@ st.markdown("""
         конечных элементов. Мы обсудим его основные возможности, настройку сеток, работу с файлами 
         форматов .geo и .msh, а также примеры его применения в различных задачах моделирования.
     </p>
+    <p style="text-align:left; font-size: 18px;">
+        Данный проект можно посмотреть и скачать на 
+        <a href="https://github.com/nkt50i/Gmsh" target="_blank" style="font-weight: bold;">
+        GitHub</a>.
+    </p>
     <p style="text-align:left; font-size: 18px; font-weight: bold;">
         ❗❗❗ Все ссылки в презентации работают только с VPN ❗❗❗
     </p>
