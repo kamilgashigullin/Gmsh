@@ -20,6 +20,14 @@ def run_gmsh(file_path):
     except subprocess.CalledProcessError:
         st.error("Ошибка при запуске Gmsh.")
 
+def save_code(filename, code):
+    with open(filename, "w") as f:
+        f.write(code)
+    st.success(f"Код сохранён в {filename}")
+
+def run_script(filename):
+    os.system(f"python {filename}")
+
 st.set_page_config(page_title="Руководство по работе с Gmsh", layout="wide")
 st.sidebar.title("Навигация")
 sections = {
@@ -1759,6 +1767,7 @@ elif choice == "Подготовка сетки для FEniCS":
     - Конвертировать сетку в формат `.xml` или `.xdmf` с помощью `meshio` или `dolfin-convert`.
     - Загрузить сетку в FEniCS и определить граничные условия с помощью физических групп.
               """)
+
 elif choice == "Constructive Solid Geometry технология в Gmsh":
     st.write("""**Constructive Solid Geometry (CSG)** — это технология, используемая для создания сложных геометрических моделей путём комбинирования простых фигур (примитивов) с помощью **булевых операций**: **объединение (union)**, **вычитание (difference)** и **пересечение (intersection)**. В Gmsh эта технология активно применяется для построения геометрии.""")
     st.subheader("Пример использования CSG в Gmsh")
@@ -1766,26 +1775,32 @@ elif choice == "Constructive Solid Geometry технология в Gmsh":
     st.write("""
     1. **Создание примитивов:**
         - Прямоугольник (Rectangle).
-        - Круг (Circle)
+        - Круг (Disk)
     2. **Применение булевых операций:**
         - Используем операцию **вычитания (Difference)**, чтобы удалить круг из прямоугольника.""")
         
     st.write("""
     Пример кода в Gmsh:
     ```bash
-    // Создание прямоугольника
+    // Включаем OpenCASCADE
+    SetFactory("OpenCASCADE");
+
+    // Создание прямоугольной поверхности
     Rectangle(1) = {0, 0, 0, 2, 1, 0};
-    // Прямоугольник с координатами (0,0) и размерами 2x1
-            
-    // Создание круга
-    Circle(2) = {1, 0.5, 0, 0.25, 0, 2*Pi};
-    // Круг с центром в (1, 0.5) и радиусом 0.25
-            
-    // Применение булевой операции Difference
+
+    // Создание круглой поверхности (диска)
+    Disk(2) = {1, 0.5, 0, 0.25};
+
+    // Вычитание диска из прямоугольника
     BooleanDifference(3) = { Surface{1}; Delete; }{ Surface{2}; Delete; };
-            
-    // Генерация сетки
-    Mesh 2;  // Генерация 2D-сетки""")
+
+    // Генерация 2D-сетки
+    Mesh 2;
+
+    """)
+
+    if st.button("Запустить Gmsh"):
+            run_gmsh("rectangle_geometry.geo")
             
     st.write("""
             Объяснение кода:
@@ -1828,6 +1843,8 @@ elif choice == "Constructive Solid Geometry технология в Gmsh":
 
     **Код в Gmsh:**
     ```bash
+    // Добавляем OpenCASCADE
+    SetFactory("OpenCASCADE");
     // Создание первого цилиндра
     Cylinder(1) = {0, 0, 0, 2, 0, 0, 0.5, 2*Pi};
     // Центр (0,0,0), ось (2,0,0), радиус 0.5
@@ -1843,6 +1860,9 @@ elif choice == "Constructive Solid Geometry технология в Gmsh":
     Mesh 3;
 
     """)
+
+    if st.button("Запустить Gmsh для сложной геометрии"):
+            run_gmsh("complex_geometry.geo")
                 
     st.subheader("Итоги:")
     st.write("""
