@@ -85,6 +85,7 @@ if choice == "Общая характеристика ПО":
         
     st.subheader("Пример кода для создания сетки")
     code = """
+
         SetFactory("OpenCASCADE");
         lc = 1e-2;
         Point(1) = {0, 0, 0, lc};
@@ -103,7 +104,7 @@ if choice == "Общая характеристика ПО":
         Physical Curve(5) = {1, 2, 4};
         Physical Surface("My surface") = {1};
 
-        
+            
         Rectangle(2) = {0.2, 0.0, 0.0, 0.1, 0.3};
         Geometry.PointNumbers = 1;
         Geometry.Color.Points = {0, 255, 0};
@@ -114,7 +115,7 @@ if choice == "Общая характеристика ПО":
         Mesh 2;
         
     """
-    st.code(code, language="plaintext")
+    st.code(code, language="python")
     
     if st.button("Запустить пример"):
         file_path = "example.geo"
@@ -129,12 +130,6 @@ elif choice == "Установка":
 
     st.write("""
 
-    - **Windows:**
-        1. Перейдите на страницу [с загрузками Gmsh для Windows](http://gmsh.info/).
-        2. Скачайте и установите `.exe` файл для вашей системы (обычно это файл с расширением `.exe`).
-        3. Следуйте инструкциям мастера установки.
-        4. После установки Gmsh будет доступен для использования.
-
     - **Linux:**
         1. Используйте команду для установки Gmsh через пакетный менеджер:
             - Для Ubuntu/Debian:
@@ -145,7 +140,6 @@ elif choice == "Установка":
               ```bash
               sudo dnf install gmsh
               ```
-
         2. Для установки последней версии Gmsh можно также скомпилировать из исходников с [официального репозитория Gmsh](http://gmsh.info/).
 
     - **macOS:**
@@ -156,19 +150,28 @@ elif choice == "Установка":
 
         2. Альтернативно можно скачать установщик с [официального сайта Gmsh](http://gmsh.info/).
 
+    - **Windows:**
+        1. Перейдите на страницу [с загрузками Gmsh для Windows](http://gmsh.info/).
+        2. Скачайте и установите `.exe` файл для вашей системы (обычно это файл с расширением `.exe`).
+        3. Следуйте инструкциям мастера установки.
+        4. После установки Gmsh будет доступен для использования.
+
+
     """)
 
-    # Кнопка для скачивания Gmsh для Windows
-    if st.button("Скачать Gmsh для Windows"):
-        st.write("Вы можете скачать Gmsh для Windows по [ссылке](http://gmsh.info/#Download).")
+    # Кнопка для установки Gmsh на Linux
+    if st.button("Установить Gmsh на Linux"):
+        st.write("Для установки Gmsh на Linux используйте команду: `sudo apt-get install gmsh` на Ubuntu/Debian или `sudo dnf install gmsh` на Fedora.")
 
     # Кнопка для установки Gmsh через Homebrew на macOS
     if st.button("Установить Gmsh на macOS"):
         st.write("Для установки Gmsh через Homebrew на macOS, выполните команду: `brew install gmsh`.")
 
-    # Кнопка для установки Gmsh на Linux
-    if st.button("Установить Gmsh на Linux"):
-        st.write("Для установки Gmsh на Linux используйте команду: `sudo apt-get install gmsh` на Ubuntu/Debian или `sudo dnf install gmsh` на Fedora.")
+    # Кнопка для скачивания Gmsh для Windows
+    if st.button("Скачать Gmsh для Windows"):
+        st.write("Вы можете скачать Gmsh для Windows по [ссылке](http://gmsh.info/#Download).")
+
+
 
 elif choice == "Геометрические элементы":
     dimensions = st.selectbox("Выберите размерность",["0D", "1D", "2D", "3D"])
@@ -195,7 +198,7 @@ elif choice == "Геометрические элементы":
             General.Color.Text = White;
             Geometry.Color.Surfaces = Geometry.Color.Points;
             """
-            st.code(code, language="plaintext")
+            st.code(code, language="python")
     
             if st.button("Запустить пример"):
                 file_path = "example.geo"
@@ -226,7 +229,7 @@ elif choice == "Геометрические элементы":
             General.Color.Text = White;
             Geometry.Color.Surfaces = Geometry.Color.Points;
             """
-            st.code(code, language="plaintext")
+            st.code(code, language="python")
 
             if st.button("Запустить пример"):
                 file_path = "example.geo"
@@ -259,6 +262,7 @@ elif choice == "Геометрические элементы":
             General.Color.Text = White;
             Geometry.Color.Surfaces = Geometry.Color.Points;
             """
+            
 
         elif element_type == "Bezier":
             st.write("""
@@ -294,6 +298,7 @@ elif choice == "Геометрические элементы":
             geo_code += "General.Color.Text = White;\n"
             geo_code += "Geometry.Color.Surfaces = Geometry.Color.Points;\n"
             geo_code = geo_code.lstrip()
+        
 
         elif element_type == "Spline":
 
@@ -338,6 +343,7 @@ elif choice == "Геометрические элементы":
             geo_code += "General.Color.Text = White;\n"
             geo_code += "Geometry.Color.Surfaces = Geometry.Color.Points;\n"
             geo_code = geo_code.lstrip()
+            
         
 
         elif element_type == "BSpline":
@@ -380,6 +386,7 @@ elif choice == "Геометрические элементы":
             geo_code += "General.Color.Text = White;\n"
             geo_code += "Geometry.Color.Surfaces = Geometry.Color.Points;\n"
             geo_code = geo_code.lstrip()
+        
 
         elif element_type == "Circle":
 
@@ -429,6 +436,7 @@ elif choice == "Геометрические элементы":
             geo_code += "General.Color.Text = White;\n"
             geo_code += "Geometry.Color.Surfaces = Geometry.Color.Points;\n"
             geo_code = geo_code.lstrip()
+            
 
         elif element_type == "Ellipse":
 
@@ -488,6 +496,7 @@ elif choice == "Геометрические элементы":
             geo_code += "General.Color.Text = White;\n"
             geo_code += "Geometry.Color.Surfaces = Geometry.Color.Points;\n"
             geo_code = geo_code.lstrip()
+        
 
         elif element_type == "Curve Loop":
             st.write("""
@@ -535,6 +544,7 @@ elif choice == "Геометрические элементы":
             General.Color.Text = White;
             Geometry.Color.Surfaces = {200, 200, 200}; 
             """
+            
 
         elif element_type == "Physical Curve":
 
@@ -572,7 +582,7 @@ elif choice == "Геометрические элементы":
             Geometry.Color.Surfaces = Geometry.Color.Points;
             """
 
-        show_code(geo_code, "plaintext")
+        show_code(geo_code, "python")
     
         def save_example_file():
             example_file_path = "./example.geo"
@@ -644,6 +654,7 @@ elif choice == "Геометрические элементы":
             Mesh 2;
 
             """
+            
 
         
         elif element_type_2D == "Bezier(BSpline) Surface":
@@ -700,6 +711,7 @@ elif choice == "Геометрические элементы":
             Mesh 2;
 
             """
+            
         
         elif element_type_2D == "Surface Loop":
             st.write("""
@@ -756,6 +768,7 @@ elif choice == "Геометрические элементы":
             Mesh 2;
 
             """
+            
 
         elif element_type_2D == "Physical Surface":
             st.write("""
@@ -801,7 +814,8 @@ elif choice == "Геометрические элементы":
             Mesh 2;
             """
 
-        show_code(geo_code, "plaintext")
+
+        show_code(geo_code, "python")
     
         def save_example_file():
             example_file_path = "./example.geo"
@@ -1051,7 +1065,7 @@ elif choice == "Геометрические элементы":
 
             """
 
-        show_code(geo_code, "plaintext")
+        show_code(geo_code, "python")
     
         def save_example_file():
             example_file_path = "./example.geo"
@@ -1066,6 +1080,7 @@ elif choice == "Геометрические элементы":
 
     
 elif choice == "Файл геометрии":
+
     # 1. Установка фабрики геометрии
     st.header("1. Установка фабрики геометрии")
     st.write("""
@@ -1222,7 +1237,7 @@ elif choice == "Файл геометрии":
     Команда `Mesh 2;` запускает процесс генерации сетки для всех объектов, описанных в файле .geo.
     """)
 
-    st.header("2. Пример простого файла .geo")
+    st.header("8. Пример простого файла .geo")
     geo_code = """
     SetFactory("OpenCASCADE");
     Circle(1) = {0,0,0, 0.5}; Curve Loop(1) = 1;
@@ -1258,7 +1273,7 @@ elif choice == "Файл геометрии":
     Mesh 2;
 
     """
-    show_code(geo_code, "plaintext")
+    show_code(geo_code, "python")
 
     # Загрузка файла примера
     def save_example_file():
@@ -1310,7 +1325,7 @@ elif choice == "Создание области":
     Point(7) = {L, L, L, L/Nx};
     Point(8) = {0, L, L, L/Nx};
     """
-    show_code(geo_code1, "plaintext")
+    show_code(geo_code1, "python")
 
     st.subheader("Шаг 2: Построение ребер куба")
 
@@ -1329,7 +1344,7 @@ elif choice == "Создание области":
     Line(12) = {4, 8};
     
     """
-    show_code(geo_code2, "plaintext")
+    show_code(geo_code2, "python")
 
     st.subheader("Шаг 3: Построение поверхности куба")
     geo_code3 = """
@@ -1348,7 +1363,7 @@ elif choice == "Создание области":
     Plane Surface(24) = {23};
 
     """
-    show_code(geo_code3, "plaintext")
+    show_code(geo_code3, "python")
 
     st.subheader("Шаг 4: Построение объема")
 
@@ -1366,7 +1381,7 @@ elif choice == "Создание области":
     Color Red {Volume{26};}
     Mesh 3;
     """
-    show_code(geo_code4, "plaintext")
+    show_code(geo_code4, "python")
 
     geo_full_code = geo_code1 + geo_code2 + geo_code3 + geo_code4
 
@@ -1453,7 +1468,7 @@ elif choice == "Создание области":
     Recombine Surface {14, 16, 18, 20, 22, 24};
     Mesh 3;
     """
-    show_code(geo_code5, "plaintext")
+    show_code(geo_code5, "python")
 
     # Загрузка файла примера
     def save_example_file():
@@ -1487,7 +1502,7 @@ elif choice == "Создание области":
     // Генерируем объемную сетку
     Mesh 3;
     """
-    show_code(geo_code6, "plaintext")
+    show_code(geo_code6, "python")
 
     st.write("""
      - Преимущества: Можно использовать сложные геометрии из других программ (SolidWorks, FreeCAD).
