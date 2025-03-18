@@ -1,0 +1,185 @@
+elif choice == "Составные области":
+    st.header("Команды организации составных областей")
+    st.write(
+            """
+            Составные области в Gmsh — это способ объединения нескольких геометрических объектов (линий, поверхностей или объемов) в единый составной объект. 
+            Это позволяет упростить работу с сложными геометриями и улучшить качество сетки. 
+            
+            Основным способом логического объединения объектов для назначения материальных свойств, граничных условий и экспорта меток в решатели являются команды объединения в физические группы(Physical groups) 
+            Для управления генерацией стеки используются команды `Compound Curve`, `Compound Surface`, `Compound Volume`. 
+            Они указывают Gmsh рассматривать группу объектов как единое целое при построении сетки.
+
+            Команда `Compound Curve` объединяет линии (отрезки, дуги, сплайны) в единую логическую кривую.
+            Команда `Compound Surface` объединяет поверхности в группу.
+            Команда `Compound Volume` объединяет объемы в логическую группу.
+            Таким образом операции `Compound` осуществляют логическое объединение для управления сеткой, при этом не сохраняются в файле `.msh` как отдельные сущности.
+
+
+
+            Для объединения геометрических объектов используются Булевы операции (Boolean Operations ), например такие как `BooleanUnion`, `BooleanDifference`
+
+            `BooleanUnion` : Создает объект, объединяющий два или более исходных объекта.
+            `BooleanDifference`: Удаляет из первого объекта все части, пересекающиеся со вторым объектом.
+            `BooleanIntersection`: Оставляет только область пересечения объектов.
+            `BooleanFragments`: Разбивает объекты на общие и уникальные части.
+            """
+            )
+    geo_code_07 = """
+                SetFactory("OpenCASCADE");
+
+                // Создаем два куба
+                Box(1) = {0, 0, 0, 1, 1, 1};
+                Box(2) = {1, 0, 0, 1, 1, 1};
+
+                // Объединяем их через BooleanUnion
+                BooleanUnion(3) = {Volume{1}; Delete;} {Volume{2}; Delete;};
+
+                // Назначаем физическую группу на результат
+                Physical Volume("Merged_Volumes") = {3};
+
+                // Объединяем границы для сетки
+                Compound Surface(200) = {1, 2, 5, 6}; // Внешние грани
+                Physical Surface("External_Walls") = {200};
+                
+                Mesh.CharacteristicLengthMin = 0.2;
+                Mesh 3;
+                """
+    show_code(geo_code_07,"plaintext")
+
+    def save_example_file():
+        example_file_path = './example.geo'
+        with open(example_file_path, 'w') as f:
+            f.write(geo_code_07)
+        return example_file_path
+
+    # Кнопка для загрузки и запуска примера
+    if st.button("Пример "):
+        example_file_path = save_example_file()
+        run_gmsh(example_file_path)
+    
+elif choice == "Маркирование подобластей и частей границ":
+    
+    st.write(
+        """
+        Физические группы (Physical groups) - именованные наборы геометрических объектов (кривых, поверхностей, объёмов), 
+        которые позволяют задавать граничные условия, материалы или другие свойства в численном моделировании.
+
+        """
+    )
+    st.subheader("Команды выделения физических групп")
+    st.write( 
+        """ 
+        Для создания физических групп используются команды `Physical Curve`, `Physical Surfacee`, `Physical Volume`
+
+       **`Physical Curve`**
+        Помечает линии (кривые) как физические группы. 
+        Используется для задания граничных условий (например, фиксированные края, источники тепла) или интерфейсов между областями.
+
+        **`Physical Surface`**
+        Помечает поверхности как физические группы. 
+        Используется для задания материалов (например, "Воздух", "Металл") или подобластей с разными свойствами.
+
+        **`Physical Volume`** 
+        Помечает объёмы как физические группы. Используется в 3D-моделях для задания материалов или подобластей.
+        """
+        )
+    geo_code_7 = """
+            SetFactory("OpenCASCADE");
+
+            // Создаем квадрат
+            Rectangle(1) = {0, 0, 0, 1, 1};
+
+            // Физические группы (граничные условия)
+            Physical Curve("Fixed_Boundary") = {4}; // Левая грань (линия 4)
+            Physical Curve("Heat_Flux") = {2};      // Правая грань (линия 2)
+            Physical Surface("Domain") = {1};       // Основная область
+
+            // Цвета для граничных условий
+            Color Red { Curve{4} };       // Фиксированная грань — красный
+            Color Blue { Curve{2} };      // Тепловой поток — синий
+            Color LightGray { Surface{1} }; // Область — серый
+
+            // Генерация сетки
+            Mesh.CharacteristicLengthMin = 0.1;
+            Mesh 2;
+    
+            """
+    show_code(geo_code_7,"plaintext")
+
+    def save_example_file():
+        example_file_path = './example.geo'
+        with open(example_file_path, 'w') as f:
+            f.write(geo_code_7)
+        return example_file_path
+
+    # Кнопка для загрузки и запуска примера
+    if st.button("Пример 1-D"):
+        example_file_path = save_example_file()
+        run_gmsh(example_file_path)
+    geo_code_8 = """
+                SetFactory("OpenCASCADE");
+                // Первый прямоугольник (Материал 1)
+                Rectangle(1) = {0, 0, 0, 1, 1, 0};
+
+                // Второй прямоугольник (Материал 2)
+                Rectangle(2) = {1, 0, 0, 1, 1, 0};
+
+                // Физические поверхности
+                Physical Surface("Air") = {1};
+                Physical Surface("Metal") = {2};
+
+                // Общая граница между ними
+                Physical Curve("Interface") = {2}; // Линия между прямоугольниками
+                // Генерация сетки
+                Mesh.CharacteristicLengthMin = 0.1;
+                Mesh.CharacteristicLengthMax = 0.1;
+                Mesh 2; // Для 2D
+
+                """
+    show_code(geo_code_8,"plaintext")
+    def save_example_file():
+        example_file_path = './example.geo'
+        with open(example_file_path, 'w') as f:
+            f.write(geo_code_8)
+        return example_file_path
+
+    if st.button("Пример 2 -D"):
+        example_file_path = save_example_file()
+        run_gmsh(example_file_path)
+    geo_code_9 = """
+                SetFactory("OpenCASCADE");
+
+                // Создаем сферу (основной объект)
+                Sphere(1) = {0, 0, 0, 5};  // Центр (0,0,0), радиус 5
+
+                // Создаем куб (объект, который будет вычтен)
+                Box(2) = {-3, -3, -3, 6, 6, 6}; // Центр (0,0,0), размеры 6x6x6
+
+                // Вычитаем куб из сферы
+                BooleanDifference(3) = {Volume{1}; Delete;} {Volume{2}; Delete;};
+
+                // Физические группы для визуализации
+                Physical Volume("Result") = {3};      // Оставшаяся часть сферы
+                Physical Surface("CutBoundary") = {2}; // Граница выреза (бывшие грани куба)
+
+                Color Red { Volume{3} }; 
+                Color Blue { Surface{2} };
+
+                // Настройки сетки
+                Mesh.CharacteristicLengthMin = 1.0;
+                Mesh.CharacteristicLengthMax = 1.0;
+
+                // Генерация 3D-сетки
+                Mesh 3;
+
+                """
+    show_code(geo_code_9,"plaintext")
+    def save_example_file():
+        example_file_path = './example.geo'
+        with open(example_file_path, 'w') as f:
+            f.write(geo_code_9)
+        return example_file_path
+
+    if st.button("Пример 3 -D"):
+        example_file_path = save_example_file()
+        run_gmsh(example_file_path)    
